@@ -10,7 +10,6 @@ export default function LoginForm(props) {
   const { showRegisterForm, onCloseModal } = props;
   const [loading, setLoading] = useState(false);
   const auth = useAuth();
-  console.log(auth);
 
   const formik = useFormik({
     initialValues: initialValues(),
@@ -19,8 +18,7 @@ export default function LoginForm(props) {
       setLoading(true);
       const response = await loginApi(formData);
       if (response?.jwt) {
-        console.log(response);
-        console.log("Login OK!!");
+        login(response.jwt);
         onCloseModal();
       } else {
         toast.error("Email o Contraseña incorrectos");
