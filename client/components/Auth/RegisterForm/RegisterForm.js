@@ -3,16 +3,28 @@ import { Form, Button } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { registerApi } from "../../../api/user";
+import { toast } from "react-toastify";
 
 export default function RegisterForm(props) {
   const { showLoginForm } = props;
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
-    onSubmit: (formData) => {
-      console.log(formData);
-      registerApi(formData);
+    onSubmit: async (formData) => {
+      setLoading(true);
+      const response = await registerApi(formData);
+      console.log(response);
+
+      if (response?.jwt) {
+        toast.success("Registrado correctamente!");
+        showLoginForm();
+      } else {
+        toast.error("Error registrando usuario, intentelo mas tarde");
+      }
+
+      setLoading(false);
     },
   });
 
@@ -57,7 +69,7 @@ export default function RegisterForm(props) {
         <Button type="button" basic>
           Iniciar Sesión
         </Button>
-        <Button type="submit" className="submit">
+        <Button type="submit" className="submit" loading={loading}>
           Registrar
         </Button>
       </div>

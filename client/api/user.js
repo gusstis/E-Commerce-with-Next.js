@@ -12,9 +12,9 @@ export async function registerApi(formData) {
     };
     const response = await fetch(url, params);
     const result = await response.json();
-    console.log(result);
+    return result;
   } catch (error) {
-    console.log(error);
+    console.log(error); //Acá va a decir que el POST no va a ningun lado..
     return null;
   }
 }
