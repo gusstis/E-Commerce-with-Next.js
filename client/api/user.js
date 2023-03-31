@@ -1,4 +1,5 @@
 import { BASE_PATH } from "../utils/constants";
+import {authFetch} from '../utils/fetch';
 
 export async function registerApi(formData) {
   try {
@@ -55,4 +56,13 @@ export async function resetPasswordApi(email) {
     console.log(error);
     return null;
   }
+}
+
+export async function getMeApi(logout) //para traer los datos de usuario del backend
+try {
+  const url = `${BASE_PATH}/users/me`;
+  const result = await authFetch(url, null, logout);
+  return result ? = result : null
+} catch (error) {
+  return null;
 }

@@ -1,16 +1,26 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Menu, Grid, Icon, Label } from "semantic-ui-react";
 import Link from "next/link";
 import BasicModal from "../../Modal/BasicModal";
 import Auth from "../../Auth";
 import useAuth from "../../../hooks/useAuth";
+import { getMeApi } from "../../../api/user";
 
 export default function MenuWeb() {
   const [showModal, setShowModal] = useState(false);
   const onShowModal = () => setShowModal(true);
   const onCloseModal = () => setShowModal(false);
   const [titleModal, setTitleModal] = useState("Inicia Sesión");
+  const [user, setUser] = useState(undefined);
   const { auth, logout } = useAuth();
+
+  useEffect(() => {
+    (async () => {
+      //funcion asincrona anonima autoconvocada, porque no  se puede poner async en el useEffect
+      const response = await getMeApi(logout);
+      setUser(response); // así los datos de usuario los tenemos en setUser
+    })();
+  }, [auth]);
 
   return (
     <div className="menu">
