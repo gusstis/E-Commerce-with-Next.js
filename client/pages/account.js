@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth"; // De acá obtenemos si el user esta logged
 import { getMeApi } from "../api/user";
+import ChangeNameForm from "../components/Account/ChangeNameForm";
 
 export default function Account() {
   const [user, setUser] = useState(undefined);
@@ -17,16 +18,20 @@ export default function Account() {
 
   return (
     <BasicLayout className="account">
-      <Configuration />
+      <Configuration user={user} />
     </BasicLayout>
   );
 }
 
-function Configuration() {
+function Configuration(props) {
+  const { user } = props;
+
   return (
     <div className="acconut__configuration">
       <div className="title">Configuración</div>
-      <div className="data">Formularios de configuración</div>
+      <div className="data">
+        <ChangeNameForm user={user} />
+      </div>
     </div>
   );
 }
