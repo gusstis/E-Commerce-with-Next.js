@@ -4,6 +4,7 @@ import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth"; // De acá obtenemos si el user esta logged
 import { getMeApi } from "../api/user";
 import ChangeNameForm from "../components/Account/ChangeNameForm";
+import ChangeEmailForm from "../components/Account/ChangeEmailForm";
 
 export default function Account() {
   const [user, setUser] = useState(undefined);
@@ -42,6 +43,11 @@ function Configuration(props) {
       <div className="title">Configuración</div>
       <div className="data">
         <ChangeNameForm
+          user={user}
+          logout={logout}
+          setReloadUser={setReloadUser}
+        />
+        <ChangeEmailForm
           user={user}
           logout={logout}
           setReloadUser={setReloadUser}
