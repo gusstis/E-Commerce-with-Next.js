@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {Icon} from 'semantic-ui-react';
 import { useRouter } from "next/router";
 import BasicLayout from "../layouts/BasicLayout";
 import useAuth from "../hooks/useAuth"; // De acá obtenemos si el user esta logged
@@ -32,6 +33,7 @@ export default function Account() {
         logout={logout}
         setReloadUser={setReloadUser}
       />
+      <Adresses />
     </BasicLayout>
   );
 }
@@ -59,4 +61,18 @@ function Configuration(props) {
       </div>
     </div>
   );
+}
+
+function Adresses() {
+  return (
+    <div className="account__adresses" >
+      <div className="title">
+        Direcciones...
+        <Icon name="plus" link />
+        <div className="data">
+          <p>Lista de direcciones...</p>
+        </div>
+        </div>
+    </div>
+  )
 }
