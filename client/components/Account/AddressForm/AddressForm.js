@@ -1,16 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Button } from "semantic-ui-react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import useAuth from "../../../hooks/useAuth";
+import { createAddressApi } from "../../../api/address";
 
-export default function AddressForm() {
+export default function AddressForm(props) {
+  const { setShowModal } = props;
+  const [loading, setLoading] = useState(false);
+  const { auth, logout } = useAuth();
+
   const formik = useFormik({
     initialValues: initialValues(),
     validationSchema: Yup.object(validationSchema()),
     onSubmit: (FormData) => {
-      console.log(FormData);
+      createAddress(FormData);
     },
   });
+
+  const createAddress = async (FormData) => {
+    setLoading(true);
+    const formDataTemp = {
+      ...formData,
+      user: auth.idUser,
+    };
+    const response = await createAddressApi(formDataTemp, logout);
+
+    if (!response) {
+      toast.warning("Error al crear la dirección..");
+      setLoading(false);
+    } else {
+      formik.resetForm();
+      setLoading(false);
+      setShowModal(false);
+    }
+  };
 
   return (
     <Form onSubmit={formik.handleSubmit}>
@@ -84,7 +108,7 @@ export default function AddressForm() {
         />
       </Form.Group>
       <div className="actions">
-        <Button className="submit" type="submit">
+        <Button className="submit" type="submit" loading={loading}>
           Crear dirección
         </Button>
       </div>
@@ -115,3 +139,20 @@ function validationSchema() {
     phone: Yup.string().required(true),
   };
 }
+
+/* Ahora queda crear la colección de direcciones en el backend: collName: address
+title:  type: text  campo  obligatorio
+name:   type text   campo obligatorio
+address:type text   campo obligatorio
+city:   type text   campo obligatorio
+state:  type text   campo obligatorio
+postalCode: type text campo obligatorio
+phone:  type text   campo obligatorio
+#luego agregamos un campo relacionado (relacion) address ---> user
+# ahara faltaría agregar roles y permisos, habilitar los endpoints(usuarios autenticados
+>find
+>delete
+>create
+>update
+>findone
+*/
